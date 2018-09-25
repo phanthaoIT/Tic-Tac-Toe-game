@@ -31,12 +31,13 @@ class Game extends React.Component {
       history: [
         {
           squares: Array(9).fill(null),
-          location: ''
+          location: '',
         }
       ],
       stepNumber: 0,
       xIsNext: true,
-      sort:false
+      sort:false,
+      pos:null
     };
   }
   handleClick(i){
@@ -47,15 +48,16 @@ class Game extends React.Component {
       return;
     }
     const matrixSize = Math.sqrt(history[0].squares.length);
-    const location = [(i % matrixSize) + 1, Math.floor(i / matrixSize) + 1].join(", ");
+    const location = [Math.floor(i / matrixSize) + 1,(i % matrixSize) + 1].join(", ");
     squares[i] = this.state.xIsNext ? 'X' : 'O';
     this.setState({
       history: history.concat([{
         squares: squares,
-        location: location,
+        location: location
       }]),
       xIsNext: !this.state.xIsNext,
-      stepNumber: history.length
+      stepNumber: history.length,
+      pos:i
     });
   }
   jumpTo(step) {
@@ -69,6 +71,20 @@ class Game extends React.Component {
         sort:!sort
       })
   }
+  PlayClick() {
+    this.setState({
+      history: [
+        {
+          squares: Array(9).fill(null),
+          location: '',
+        }
+      ],
+      stepNumber: 0,
+      xIsNext: true,
+      sort:false,
+      pos:null
+    })
+}
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -79,7 +95,7 @@ class Game extends React.Component {
         'Go to game start';
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => this.jumpTo(move)} className={move===this.state.stepNumber ? "highlight" : ""}>{desc}</button>
         </li>
       );
     });
@@ -105,6 +121,7 @@ class Game extends React.Component {
         <div className="game-info">
           <div>{status}</div>
           <button onClick={() => this.Sort(this.state.sort)}>Sort</button>
+          <button className={(winner || this.state.stepNumber === 9)? "playAgain":"hide"} onClick={this.PlayClick.bind(this)}>Play again</button>
           <ol reversed={this.state.sort ? 'Sort' :'' }>{this.state.sort ? moves.reverse() : moves}</ol>
         </div>
       </div>

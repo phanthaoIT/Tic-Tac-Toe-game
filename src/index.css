@@ -55,10 +55,14 @@ ol, ul {
 .winner{
   background-color: #d3d3d3;
 }
-button{
-  height: 30px;
+.highlight{
   background: #87CEFA;
-  border-radius:20px;
-  margin-top: 10px;
-  font-size: 20px
+  border-radius:10px;
+}
+.hide {
+  display: none
+}
+
+.playAgain {
+    margin-left: 10px
 }
